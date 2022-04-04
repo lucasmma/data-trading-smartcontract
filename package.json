@@ -1,0 +1,26 @@
+{
+  "name": "data-trading-smartcontract",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build-deploy": "sol-merger \"./contracts/*.sol\" ./build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^1.6.0",
+    "dotenv": "^10.0.0",
+    "moment": "^2.29.1",
+    "openzeppelin-solidity": "^4.3.3"
+  },
+  "devDependencies": {
+    "sol-merger": "^3.1.0",
+    "truffle-plugin-verify": "^0.5.21"
+  }
+}
