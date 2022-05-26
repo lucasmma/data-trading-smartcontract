@@ -15,7 +15,7 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
       uint allowCount;
       mapping(address => bool) allowers;
     }
-        mapping(address => EntryRequest) public entries;
+    mapping(address => EntryRequest) public entries;
 
     struct TokenSale { 
       address owner;
@@ -28,7 +28,6 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
     uint traderCount;
     mapping(address => bool) public isTrader;
 
-
     event SaleCreated(uint indexed saleID);
     event SaleSold(uint indexed saleID);
 
@@ -38,8 +37,15 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
     }
 
     modifier onlyTrader() {
-        require(isTrader[msg.sender], "Not trader");
-        _;
+      require(isTrader[msg.sender], "Not trader");
+      _;
+    }
+
+    /**
+    * Checks if Caller is User
+    */
+    function isTraderPresent(address user) public view returns (bool) {
+      return isTrader[user];
     }
 
    /**
@@ -68,11 +74,10 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
     }
 
    /**
-    * Removes trader
+    * Trader exits
     */
-    function removeTrader(address user) public onlyOwner {
-      require(isTrader[user], "User must be already a trader");
-      isTrader[user] = false;
+    function exitCircle() public onlyTrader {
+      isTrader[msg.sender] = false;
       traderCount -= 1;
     }
 
