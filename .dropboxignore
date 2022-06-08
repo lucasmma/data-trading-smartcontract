@@ -1,7 +1,0 @@
-# ----
-# Automatically Generated .dropboxignore file at Qui 26 Mai 2022 10:38:32 -03
-# ----
-node_modules
-build
-.env
-# ----
