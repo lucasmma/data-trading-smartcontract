@@ -62,14 +62,13 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
     */
     function allowEntry(address user) public onlyTrader {
       require(isTrader[user] == false, "User is already trader");
-      require(entries[msg.sender].hasBeenRequested, "Entry has not been requested");
-      if (entries[user].allowers[msg.sender] == false) {
-        entries[user].allowers[msg.sender] = true;
-        entries[user].allowCount += 1;
-        if (entries[user].allowCount >= traderCount) {
-          isTrader[user] = true;
-          traderCount += 1;
-        }
+      require(entries[user].hasBeenRequested, "Entry has not been requested");
+      require(entries[user].allowers[msg.sender] == false, "Entry has already been approved");
+      entries[user].allowers[msg.sender] = true;
+      entries[user].allowCount += 1;
+      if (entries[user].allowCount >= traderCount) {
+        isTrader[user] = true;
+        traderCount += 1;
       }
     }
 
