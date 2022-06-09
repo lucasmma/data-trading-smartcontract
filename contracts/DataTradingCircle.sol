@@ -80,6 +80,13 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
     }
 
    /**
+    * Returns if entry has been allowed
+    */
+    function entryHasBeenAllowed(address user) public view returns (bool) {
+      return entries[user].allowers[msg.sender];
+    }
+
+   /**
     * Trader exits
     */
     function exitCircle() public onlyTrader {
