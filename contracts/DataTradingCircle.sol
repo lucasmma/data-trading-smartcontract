@@ -17,19 +17,19 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
     }
     mapping(address => EntryRequest) public entries;
 
-    struct TokenSale { 
-      address owner;
+    struct DataTrade { 
+      address saleFrom;
+      address saleTo;
       uint price;
+      bool uploaded;
       bool sold;
-      bool active;
     }
-    mapping(uint => TokenSale) public sales;
+    mapping(uint => DataTrade) public trades;
 
     uint traderCount;
     mapping(address => bool) public isTrader;
 
-    event SaleCreated(uint indexed saleID);
-    event SaleSold(uint indexed saleID);
+    event TradeCreated(uint indexed idTrade);
 
     constructor(string memory name, string memory symbol, address firstTrader) ERC721(name, symbol) {
       isTrader[firstTrader] = true;
@@ -94,30 +94,31 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
       traderCount -= 1;
     }
 
-    /**
-    * Create Sale Token
-    */
-    function createSale(address saleAddress, uint weiPrice) public onlyTrader{
-      require(saleAddress == msg.sender, "Trader cant sell to himself");
-      uint saleID = totalSupply() + 1;
-      _safeMint(msg.sender, saleID);
-      approve(owner(), saleID);
-      sales[saleID].active = true;
-      sales[saleID].price = weiPrice;
-      sales[saleID].owner = msg.sender;
 
-      emit SaleCreated(saleID);
+    /**
+    * Create Trade Token
+    */
+    function getTrade(uint idTrade) public view onlyTrader returns (DataTrade memory){
+      return trades[idTrade];
     }
 
     /**
-    * Purchase Sale Token
+    * Create Trade Token
     */
-    function purchaseSale(uint saleID) public payable onlyTrader{
-      require(sales[saleID].active, "Sale must be active to purchase sale");
-      require(sales[saleID].price <= msg.value, "Value sent is not correct");
-      transferFrom(sales[saleID].owner, msg.sender, saleID);
+    function createTrade(address sellerAddress, uint weiPrice, uint idTrade) public onlyTrader payable{
+      require(sellerAddress != msg.sender, "Trader cant sell to himself");
+      require(isTraderPresent(sellerAddress), "Seller must be trader");
+      require(weiPrice <= msg.value, "Ether value sent is not correct");
+      require(!trades[idTrade].sold, "Trade already sold");
 
-      emit SaleSold(saleID);
+      _safeMint(msg.sender, idTrade);
+      trades[idTrade].uploaded = false;
+      trades[idTrade].sold = true;
+      trades[idTrade].price = weiPrice;
+      trades[idTrade].saleFrom = sellerAddress;
+      trades[idTrade].saleTo = msg.sender;
+
+      emit TradeCreated(idTrade);
     }
 
     /**
