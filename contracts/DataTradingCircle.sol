@@ -41,6 +41,11 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
       _;
     }
 
+    modifier onlyTraderOwner() {
+      require(isTrader[msg.sender] || owner() == msg.sender, "Not trader either owner");
+      _;
+    }
+
     /**
     * Checks if Caller is User
     */
@@ -98,7 +103,7 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
     /**
     * Create Trade Token
     */
-    function getTrade(uint idTrade) public view onlyTrader returns (DataTrade memory){
+    function getTrade(uint idTrade) public view onlyTraderOwner returns (DataTrade memory){
       return trades[idTrade];
     }
 
