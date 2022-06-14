@@ -103,7 +103,7 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
     /**
     * Create Trade Token
     */
-    function getTrade(uint idTrade) public view onlyTraderOwner returns (DataTrade memory){
+    function getTrade(uint idTrade) public view returns (DataTrade memory){
       return trades[idTrade];
     }
 
