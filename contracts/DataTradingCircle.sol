@@ -108,6 +108,17 @@ contract DataTradingCircle is ERC721Enumerable, Ownable {
     }
 
     /**
+    * Update uploaded on Trade and finish trade
+    */
+    function hasBeenUploaded(uint idTrade) public onlyOwner payable{
+      require(trades[idTrade].sold, "Trade must be sold already");
+      trades[idTrade].uploaded = true;
+      uint finalBalance = trades[idTrade].price;
+      payable(msg.sender).transfer(finalBalance * 5 / 100);
+      payable(trades[idTrade].saleFrom).transfer(finalBalance * 95 / 100);
+    }
+
+    /**
     * Create Trade Token
     */
     function createTrade(address sellerAddress, uint weiPrice, uint idTrade) public onlyTrader payable{
